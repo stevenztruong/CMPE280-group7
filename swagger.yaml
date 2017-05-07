@@ -1,0 +1,115 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Sample API"
+basePath: "/"
+paths:
+  /developers/:
+    get:
+      tags:
+      - "developers"
+      summary: "Returns the list of all developers"
+      operationId: "getDevelopers"
+      parameters:
+      - name: "firstName"
+        in: "query"
+        description: "The first name of developer that needs to be fetched"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful response"
+      x-swagger-router-controller: "developer"
+    post:
+      tags:
+      - "developers"
+      summary: "Add a new developer"
+      operationId: "addDeveloper"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "New developer object"
+        required: true
+        schema:
+          $ref: "#/definitions/Developer"
+      responses:
+        201:
+          description: "Successfully add developer"
+        400:
+          description: "Error with <reason>"
+      x-swagger-router-controller: "developer"
+  /developers/{id}:
+    get:
+      tags:
+      - "developers"
+      summary: "Finds developers by id"
+      operationId: "getDevelopersByID"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id of developer that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful response"
+      x-swagger-router-controller: "developer"
+    delete:
+      tags:
+      - "developers"
+      summary: "Delete developers by id"
+      operationId: "deleteDeveloper"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id of developer that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful response"
+      x-swagger-router-controller: "developer"
+    put:
+      tags:
+      - "developers"
+      summary: "Update developer's information"
+      operationId: "updateDeveloperByID"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id of developer that needs to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated developer object"
+        required: true
+        schema:
+          $ref: "#/definitions/Developer"
+      responses:
+        201:
+          description: "Successfully add developer"
+        400:
+          description: "Error with <reason>"
+      x-swagger-router-controller: "developer"
+definitions:
+  Developer:
+    required:
+      - "id"
+      - "firstName"
+      - "lastName"
+    properties:
+      id:
+        type: "string"
+        description: "A unique identifier for each developer"
+      firstName:
+        type: "string"
+        description: "Developer's first name"
+      lastName:
+        type: "string"
+        description: "Developer's last name"

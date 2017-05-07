@@ -1,0 +1,14 @@
+{
+    "name": "first-node-app",
+    "description": "Awesome app",
+    "version": "0.0.1",
+    "dependencies": {
+        "express": "4.13.4",
+        "body-parser": "1.15.0",
+        "log4js": "0.6.33",
+        "lodash": "*",
+        "ldapjs": "*",
+        "js-yaml": "^3.3.0",
+        "swagger-tools": "0.10.1"
+    }
+}
