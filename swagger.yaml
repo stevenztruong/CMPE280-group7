@@ -4,6 +4,9 @@ info:
   version: "1.0.0"
   title: "Sample API"
 basePath: "/"
+tags:
+  - name: "developer"
+    description: "Operations about developer"
 paths:
   /developers/:
     get:
@@ -11,12 +14,7 @@ paths:
       - "developers"
       summary: "Returns the list of all developers"
       operationId: "getDevelopers"
-      parameters:
-      - name: "firstName"
-        in: "query"
-        description: "The first name of developer that needs to be fetched"
-        required: false
-        type: "string"
+      parameters: []
       responses:
         200:
           description: "Successful response"
@@ -36,10 +34,12 @@ paths:
         schema:
           $ref: "#/definitions/Developer"
       responses:
-        201:
-          description: "Successfully add developer"
+        200:
+          description: "Successful operation"
         400:
-          description: "Error with <reason>"
+          description: "Validation exception"
+        409:
+          description: "Developer with this id already exists"
       x-swagger-router-controller: "developer"
   /developers/{id}:
     get:
@@ -56,11 +56,13 @@ paths:
       responses:
         200:
           description: "Successful response"
+        404:
+          description: "No developer found"
       x-swagger-router-controller: "developer"
     delete:
       tags:
       - "developers"
-      summary: "Delete developers by id"
+      summary: "Delete developer by id"
       operationId: "deleteDeveloper"
       parameters:
       - name: "id"
@@ -70,7 +72,9 @@ paths:
         type: "string"
       responses:
         200:
-          description: "Successful response"
+          description: "Successful operation"
+        404:
+          description: "No developer found"
       x-swagger-router-controller: "developer"
     put:
       tags:
@@ -90,12 +94,50 @@ paths:
         description: "Updated developer object"
         required: true
         schema:
-          $ref: "#/definitions/Developer"
+          $ref: "#/definitions/DeveloperWithoutID"
       responses:
-        201:
-          description: "Successfully add developer"
+        200:
+          description: "Successful operation"
         400:
-          description: "Error with <reason>"
+           description: "Validation exception"
+        404:
+          description: "No developer found"
+      x-swagger-router-controller: "developer"
+  /developers/findByFirstName/{firstName}:
+    get:
+      tags:
+      - "developers"
+      summary: "Finds developers by first name"
+      operationId: "getDevelopersByFName"
+      parameters:
+      - name: "firstName"
+        in: "path"
+        description: "First name of developer that need to be fetched"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful response"
+        404:
+          description: "No developer found"
+      x-swagger-router-controller: "developer"
+  /developers/findByLastName/{lastName}:
+    get:
+      tags:
+      - "developers"
+      summary: "Finds developers by last name"
+      operationId: "getDevelopersByLName"
+      parameters:
+      - name: "lastName"
+        in: "path"
+        description: "Last name of developers that need to be fetched"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Successful response"
+        404:
+          description: "No developer found"
       x-swagger-router-controller: "developer"
 definitions:
   Developer:
@@ -106,10 +148,26 @@ definitions:
     properties:
       id:
         type: "string"
+        minLength: 1
         description: "A unique identifier for each developer"
       firstName:
         type: "string"
+        minLength: 1
         description: "Developer's first name"
       lastName:
         type: "string"
+        minLength: 1
+        description: "Developer's last name"
+  DeveloperWithoutID:
+    required:
+      - "firstName"
+      - "lastName"
+    properties:
+      firstName:
+        type: "string"
+        minLength: 1
+        description: "Developer's first name"
+      lastName:
+        type: "string"
+        minLength: 1
         description: "Developer's last name"
